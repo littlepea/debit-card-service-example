@@ -64,3 +64,7 @@ celerybeat-schedule
 .venv
 venv/
 ENV/
+
+# DB
+*.db
+*.sqlite3
