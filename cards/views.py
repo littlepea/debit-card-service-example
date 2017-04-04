@@ -1,20 +1,38 @@
 from rest_framework import viewsets
-from django.contrib.auth.models import User, Group
-from cards.serializers import UserSerializer, GroupSerializer, TransactionSerializer, CardSerializer
+from rest_framework import mixins
+from cards.serializers import TransactionSerializer, CardSerializer
 from cards.models import Transaction, Card
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+class CardViewSet(mixins.CreateModelMixin,
+                  mixins.DestroyModelMixin,
+                  viewsets.ReadOnlyModelViewSet):
+    """
+    retrieve:
+    Return the given card.
 
-class TransactionViewSet(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
+    list:
+    Return a list of all the existing cards.
 
-class CardViewSet(viewsets.ModelViewSet):
+    create:
+    Create a new card.
+    """
     queryset = Card.objects.all()
     serializer_class = CardSerializer
+    http_method_names = ['get', 'post', 'delete']
+
+
+class TransactionViewSet(mixins.CreateModelMixin,
+                         viewsets.ReadOnlyModelViewSet):
+    """
+    retrieve:
+    Return the given transaction.
+
+    list:
+    Return a list of all the existing transactions.
+
+    create:
+    Create a new transaction.
+    """
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer

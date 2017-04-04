@@ -13,8 +13,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self._reset_db()
-        self._populate_users()
-        self._populate_cards()
+        self._populate_users_and_cards(3)
         pass
 
     @staticmethod
@@ -22,11 +21,13 @@ class Command(BaseCommand):
         User.objects.filter(is_superuser=False).delete()
         models.Card.objects.all().delete()
 
-    def _populate_users(self):
-        self.parent = factories.ParentUserFactory()
-        self.parent.set_password(DEFAULT_PASSWORD)
-        self.child = factories.ChildUserFactory()
-        self.child.set_password(DEFAULT_PASSWORD)
-
-    def _populate_cards(self):
-        self.card = factories.CardFactory(child=self.child, parent=self.parent)
+    def _populate_users_and_cards(self, amount=1):
+        for i in range(amount):
+            parent = factories.ParentUserFactory.build()
+            parent.set_password(DEFAULT_PASSWORD)
+            parent.save()
+            child = factories.ChildUserFactory.build()
+            child.set_password(DEFAULT_PASSWORD)
+            child.save()
+            card = factories.CardFactory(child=child, parent=parent)
+            pass

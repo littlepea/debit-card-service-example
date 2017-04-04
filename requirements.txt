@@ -1,8 +1,9 @@
 Django==1.10.1
 factory_boy==2.8.1
-Markdown==2.6.8
+markdown==2.6.8
 django-cors-headers==2.0.2
 django-filter==1.0.2
 djangorestframework==3.6.2
 djangorestframework-jwt==1.10.0
+django-rest-swagger==2.1.2
 django-extensions==1.7.8
