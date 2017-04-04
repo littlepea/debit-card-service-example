@@ -17,9 +17,14 @@ class CardViewSet(mixins.CreateModelMixin,
     create:
     Create a new card.
     """
-    queryset = Card.objects.all()
+    queryset = Card.objects.none()
     serializer_class = CardSerializer
     http_method_names = ['get', 'post', 'delete']
+
+    def get_queryset(self):
+        user = self.request.user
+        cards = user.parent_cards if user.is_parent else user.child_cards
+        return cards.all()
 
 
 class TransactionViewSet(mixins.CreateModelMixin,
