@@ -1,10 +1,14 @@
 from rest_framework import viewsets
 from rest_framework import mixins
+from rest_framework_extensions.mixins import NestedViewSetMixin
+from rest_framework.decorators import detail_route
+
 from cards.serializers import TransactionSerializer, CardSerializer
 from cards.models import Transaction, Card
 
 
-class CardViewSet(mixins.CreateModelMixin,
+class CardViewSet(NestedViewSetMixin,
+                  mixins.CreateModelMixin,
                   mixins.DestroyModelMixin,
                   viewsets.ReadOnlyModelViewSet):
     """
@@ -26,8 +30,20 @@ class CardViewSet(mixins.CreateModelMixin,
         cards = user.parent_cards if user.is_parent else user.child_cards
         return cards.all()
 
+    @detail_route(methods=['post'], url_path='top-up')  # TODO: add permission_classes=[IsParentCardOwner]
+    def top_up(self, request, pk=None):
+        """
+        Deposit funds to a card
 
-class TransactionViewSet(mixins.CreateModelMixin,
+        :param request: API Request instance
+        :param pk: Card ID
+        :return: API Response
+        """
+        raise NotImplementedError('top-up action is not implemented yet')
+
+
+class TransactionViewSet(NestedViewSetMixin,
+                         mixins.CreateModelMixin,
                          viewsets.ReadOnlyModelViewSet):
     """
     retrieve:
