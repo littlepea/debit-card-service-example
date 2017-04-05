@@ -12,3 +12,8 @@ class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = ('balance', 'id', 'parent_id', 'child_id',)
+
+
+class DepositSerializer(serializers.Serializer):
+    amount = serializers.DecimalField(max_digits=5, decimal_places=2,
+                                      help_text='Amount of funds to deposit to the child\'s card')

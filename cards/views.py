@@ -1,9 +1,11 @@
+import decimal
+
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework.decorators import detail_route
 
-from cards.serializers import TransactionSerializer, CardSerializer
+from cards.serializers import TransactionSerializer, CardSerializer, DepositSerializer
 from cards.models import Transaction, Card
 from cards import services
 
@@ -30,16 +32,20 @@ class CardViewSet(NestedViewSetMixin,
         return services.get_user_cards(self.request.user)
 
     @detail_route(methods=['post'], url_path='top-up')  # TODO: add permission_classes=[IsParentCardOwner]
-    def top_up(self, request, pk=None, amount=None):
+    def top_up(self, request, pk=None):
         """
         Deposit funds to a card
 
-        :param request: API Request instance
-        :param pk: Card ID
-        :param amount: Amount to deposit
-        :return: API Response
+        Data example:
+
+            {
+                "amount": 25.5
+            }
         """
-        return services.deposit_funds(pk, amount)
+        serializer = DepositSerializer(data=request.data)
+        if serializer.is_valid():
+            return services.deposit_funds(pk, amount=serializer.validated_data['amount'])
+        return
 
 
 class TransactionViewSet(NestedViewSetMixin,
