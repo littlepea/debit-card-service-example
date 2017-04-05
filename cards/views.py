@@ -5,6 +5,7 @@ from rest_framework.decorators import detail_route
 
 from cards.serializers import TransactionSerializer, CardSerializer
 from cards.models import Transaction, Card
+from cards import services
 
 
 class CardViewSet(NestedViewSetMixin,
@@ -26,20 +27,19 @@ class CardViewSet(NestedViewSetMixin,
     http_method_names = ['get', 'post', 'delete']
 
     def get_queryset(self):
-        user = self.request.user
-        cards = user.parent_cards if user.is_parent else user.child_cards
-        return cards.all()
+        return services.get_user_cards(self.request.user)
 
     @detail_route(methods=['post'], url_path='top-up')  # TODO: add permission_classes=[IsParentCardOwner]
-    def top_up(self, request, pk=None):
+    def top_up(self, request, pk=None, amount=None):
         """
         Deposit funds to a card
 
         :param request: API Request instance
         :param pk: Card ID
+        :param amount: Amount to deposit
         :return: API Response
         """
-        raise NotImplementedError('top-up action is not implemented yet')
+        return services.deposit_funds(pk, amount)
 
 
 class TransactionViewSet(NestedViewSetMixin,
