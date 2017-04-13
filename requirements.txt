@@ -4,6 +4,7 @@ django-filter==1.0.2
 djangorestframework==3.6.2
 djangorestframework-jwt==1.10.0
 django-rest-swagger==2.1.2
+braintree==3.35.0
 drf-extensions==0.3.1
 django-extensions==1.7.8
 factory_boy==2.8.1

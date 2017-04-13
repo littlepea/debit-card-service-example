@@ -1,4 +1,30 @@
-# Osper Card Service
+# Debit Card Service
+
+## Background
+
+It's an API for managing children debit cared by parents based on compliance limits.
+
+A debit card is a prepaid card that holds a balance. 
+Parents load their child's debit card using their own debit card, 
+ie. money goes from the parent's debit card to their child's debit card. 
+
+This debit card transaction is processed just like a normal e-commerce transaction 
+using a standard payment processor like Stripe or Braintree. 
+
+Before we take the money from the parent, we need to check that the load does not exceed compliance limits.
+
+The limits are as follows:
+- maximum £500 worth of loads per day
+- maximum £800 worth of loads per 30 days
+- maximum £2000 worth of loads per 365 days
+- maximum balance at any time £1000
+
+This API service handles this use case. 
+The service should use Braintree Payments as it's backend processor.  
+Braintree supplies a [sandbox environment](https://articles.braintreepayments.com/get-started/try-it-out) and test card numbers that can be used for this project.
+
+For this example we'll use UK as the location and do not need to worry about multiple currencies for now, 
+we just use GBP.
 
 ## Startup
 

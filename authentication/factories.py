@@ -6,6 +6,8 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = 'authentication.User'
 
     username = factory.Sequence(lambda n: 'user{}'.format(n))
+    first_name = 'John'
+    last_name = 'Doe'
     email = factory.LazyAttribute(lambda u: '{}@example.com'.format(u.username))
 
 
