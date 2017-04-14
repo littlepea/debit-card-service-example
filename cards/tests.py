@@ -6,9 +6,11 @@ from django.test import SimpleTestCase
 from freezegun import freeze_time
 
 from authentication.factories import ParentUserFactory, ChildUserFactory
+from cards.models import Transaction
 from cards import services, permissions
 from cards.deposit import CardDepositLimitCalculator
 from cards.factories import CardFactory
+from cards import constants
 
 
 class GetUserCardsTestCase(SimpleTestCase):
@@ -93,3 +95,17 @@ class CardDepositLimitTestCase(SimpleTestCase):
             {'date': datetime.datetime(2017, 01, 31, 9), 'amount': decimal.Decimal(100.05)}
         ])
         self.assertEqual(200.45, round(calc.max_deposit_limit, 2))
+
+
+class CardDepositServiceTestCase(SimpleTestCase):
+    def test_create_deposit_transaction(self):
+        parent = ParentUserFactory.build()
+        child = ChildUserFactory.build()
+        card = CardFactory.build(parent=parent, child=child)
+        transaction_id = '12345678'
+        amount = decimal.Decimal(10)
+        transaction = services.create_deposit_transaction(transaction_id, card, amount)
+        self.assertIsInstance(transaction, Transaction)
+        self.assertEqual(transaction_id, transaction.transaction_id)
+        self.assertEqual(amount, transaction.amount)
+        self.assertEqual(constants.TYPE_TOP_UP, transaction.type)

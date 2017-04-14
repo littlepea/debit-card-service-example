@@ -12,7 +12,7 @@ from cards import constants
 
 class Card(models.Model):
     """
-    Osper card
+    Debit card
     """
     # TODO: Allow more than one parent to access a card
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -30,8 +30,9 @@ class Card(models.Model):
 
 class Transaction(models.Model):
     """
-    Osper card transaction
+    Card transaction
     """
+    # TODO: Update card balance when transaction is created (signals)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='card_transactions',
                              verbose_name=_('Card'), help_text=_('Card used in this transaction'))
@@ -42,6 +43,8 @@ class Transaction(models.Model):
     time = models.DateTimeField(auto_now=True, verbose_name=_('Time'), help_text=_('Time of transaction'))
     amount = models.DecimalField(max_digits=5, decimal_places=2, default=decimal.Decimal(0),
                                  verbose_name=_('Amount'), help_text=_('Transaction amount'))
+    transaction_id = models.CharField(max_length=8, verbose_name=_('Transaction ID'),
+                                      help_text=_('Transaction ID associated with the payment gateway'))
 
     class Meta:
         verbose_name = _('Transaction')

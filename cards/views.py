@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import mixins
+from rest_framework.response import Response
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
@@ -46,12 +47,14 @@ class CardViewSet(NestedViewSetMixin,
                 "amount": 25.5
             }
         """
+        # TODO: validate compliance
         card = services.get_card_by_id(pk)
         self.check_object_permissions(request, card)
         serializer = DepositSerializer(data=request.data)
         if serializer.is_valid():
-            return services.deposit_funds(pk, amount=serializer.validated_data['amount'])
-        return
+            transaction = services.deposit_funds(pk, amount=serializer.validated_data['amount'])
+            serializer = TransactionSerializer(transaction)
+            return Response(data=serializer.data, status=200)
 
 
 class TransactionViewSet(NestedViewSetMixin,
