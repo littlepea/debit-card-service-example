@@ -2,8 +2,9 @@ import decimal
 import datetime
 
 import mock
-from django.test import SimpleTestCase
 from freezegun import freeze_time
+from django.test import SimpleTestCase
+from rest_framework import serializers
 
 from authentication.factories import ParentUserFactory, ChildUserFactory
 from cards.models import Transaction
@@ -11,6 +12,7 @@ from cards import services, permissions
 from cards.deposit import CardDepositLimitCalculator
 from cards.factories import CardFactory
 from cards import constants
+from cards.serializers import DepositSerializer
 
 
 class GetUserCardsTestCase(SimpleTestCase):
@@ -58,41 +60,41 @@ class CardDepositLimitTestCase(SimpleTestCase):
 
     def test_daily_limit(self):
         calc = CardDepositLimitCalculator(decimal.Decimal(400), transactions=[
-            {'date': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(200)},
-            {'date': datetime.datetime(2017, 01, 31, 9), 'amount': decimal.Decimal(200)}
+            {'time': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(200)},
+            {'time': datetime.datetime(2017, 01, 31, 9), 'amount': decimal.Decimal(200)}
         ])
         self.assertEqual(300, calc.max_deposit_limit)
 
     def test_monthly_limit(self):
         calc = CardDepositLimitCalculator(decimal.Decimal(600), transactions=[
-            {'date': datetime.datetime(2016, 12, 10, 9), 'amount': decimal.Decimal(200)},
-            {'date': datetime.datetime(2017, 01, 10, 9), 'amount': decimal.Decimal(200)},
-            {'date': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(200)}
+            {'time': datetime.datetime(2016, 12, 10, 9), 'amount': decimal.Decimal(200)},
+            {'time': datetime.datetime(2017, 01, 10, 9), 'amount': decimal.Decimal(200)},
+            {'time': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(200)}
         ])
         self.assertEqual(400, calc.max_deposit_limit)
 
     def test_yearly_limit(self):
         calc = CardDepositLimitCalculator(decimal.Decimal(200), transactions=[
-            {'date': datetime.datetime(2016, 02, 10, 9), 'amount': decimal.Decimal(600)},
-            {'date': datetime.datetime(2016, 03, 10, 9), 'amount': decimal.Decimal(600)},
-            {'date': datetime.datetime(2016, 04, 20, 9), 'amount': decimal.Decimal(600)},
-            {'date': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(-800)},
-            {'date': datetime.datetime(2017, 01, 21, 9), 'amount': decimal.Decimal(-800)}
+            {'time': datetime.datetime(2016, 02, 10, 9), 'amount': decimal.Decimal(600)},
+            {'time': datetime.datetime(2016, 03, 10, 9), 'amount': decimal.Decimal(600)},
+            {'time': datetime.datetime(2016, 04, 20, 9), 'amount': decimal.Decimal(600)},
+            {'time': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(-800)},
+            {'time': datetime.datetime(2017, 01, 21, 9), 'amount': decimal.Decimal(-800)}
         ])
         self.assertEqual(200, calc.max_deposit_limit)
 
     def test_balance_limit(self):
         calc = CardDepositLimitCalculator(decimal.Decimal(800), transactions=[
-            {'date': datetime.datetime(2016, 02, 10, 9), 'amount': decimal.Decimal(800)},
+            {'time': datetime.datetime(2016, 02, 10, 9), 'amount': decimal.Decimal(800)},
         ])
         self.assertEqual(200, calc.max_deposit_limit)
 
     def test_montly_limit_in_complex_scenario(self):
         calc = CardDepositLimitCalculator(decimal.Decimal(399.17), transactions=[
-            {'date': datetime.datetime(2016, 03, 10, 9), 'amount': decimal.Decimal(600.50)},
-            {'date': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(499.50)},
-            {'date': datetime.datetime(2017, 01, 21, 9), 'amount': decimal.Decimal(-800.88)},
-            {'date': datetime.datetime(2017, 01, 31, 9), 'amount': decimal.Decimal(100.05)}
+            {'time': datetime.datetime(2016, 03, 10, 9), 'amount': decimal.Decimal(600.50)},
+            {'time': datetime.datetime(2017, 01, 20, 9), 'amount': decimal.Decimal(499.50)},
+            {'time': datetime.datetime(2017, 01, 21, 9), 'amount': decimal.Decimal(-800.88)},
+            {'time': datetime.datetime(2017, 01, 31, 9), 'amount': decimal.Decimal(100.05)}
         ])
         self.assertEqual(200.45, round(calc.max_deposit_limit, 2))
 
@@ -109,3 +111,13 @@ class CardDepositServiceTestCase(SimpleTestCase):
         self.assertEqual(transaction_id, transaction.transaction_id)
         self.assertEqual(amount, transaction.amount)
         self.assertEqual(constants.TYPE_TOP_UP, transaction.type)
+
+
+class TransactionSerializerTestCase(SimpleTestCase):
+    def test_valid_amount(self):
+        serializer = DepositSerializer(data={'amount': 10, 'max_deposit': 20})
+        self.assertTrue(serializer.is_valid())
+
+    def test_invalid_amount(self):
+        serializer = DepositSerializer(data={'amount': 100, 'max_deposit': 20})
+        self.assertFalse(serializer.is_valid())

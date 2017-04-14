@@ -47,14 +47,22 @@ class CardViewSet(NestedViewSetMixin,
                 "amount": 25.5
             }
         """
-        # TODO: validate compliance
-        card = services.get_card_by_id(pk)
+        try:
+            card = services.get_card_by_id(pk)
+        except Card.DoesNotExist:
+            return Response(data={'errors': ['Card with id={} does not exist'.format(pk)]}, status=404)
+
         self.check_object_permissions(request, card)
-        serializer = DepositSerializer(data=request.data)
+        data = request.data
+        data['max_deposit'] = services.get_max_deposit_limit(card)
+        serializer = DepositSerializer(data=data)
+
         if serializer.is_valid():
             transaction = services.deposit_funds(pk, amount=serializer.validated_data['amount'])
             serializer = TransactionSerializer(transaction)
             return Response(data=serializer.data, status=200)
+
+        return Response(data={'errors': serializer.errors}, status=400)
 
 
 class TransactionViewSet(NestedViewSetMixin,

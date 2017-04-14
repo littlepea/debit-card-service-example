@@ -1,8 +1,11 @@
+from datetime import datetime, timedelta
+
 from django.db import transaction
 
 from payments.services import pay
 from cards.models import Card, Transaction
 from cards import constants
+from deposit import CardDepositLimitCalculator
 
 
 def get_user_cards(user):
@@ -25,6 +28,22 @@ def get_card_by_id(card_id):
     """
     card = Card.objects.get(pk=card_id)
     return card
+
+
+def get_max_deposit_limit(card):
+    """
+    Returs the max deposit limit for a card
+
+    :param card: Card instance or ID
+    :return: Deposit limit
+    """
+    if not isinstance(card, Card):
+        card = get_card_by_id(card)
+
+    date_from = datetime.today() - timedelta(days=365)
+    transactions = list(card.card_transactions.filter(time__gte=date_from).values('time', 'amount'))
+    calc = CardDepositLimitCalculator(card.balance, transactions)
+    return calc.max_deposit_limit
 
 
 def create_deposit_transaction(id, card, amount):

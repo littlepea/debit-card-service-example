@@ -17,3 +17,11 @@ class CardSerializer(serializers.ModelSerializer):
 class DepositSerializer(serializers.Serializer):
     amount = serializers.DecimalField(max_digits=5, decimal_places=2,
                                       help_text='Amount of funds to deposit to the child\'s card')
+
+    def validate_amount(self, value):
+        limit = self.initial_data['max_deposit']
+        if value > limit:
+            raise serializers.ValidationError('Deposit amount exceeds the current limit: {:.2f} GBP'.format(limit))
+
+        return value
+

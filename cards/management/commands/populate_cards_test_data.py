@@ -1,4 +1,5 @@
 import decimal
+import random
 
 from django.core.management.base import BaseCommand
 
@@ -30,7 +31,7 @@ class Command(BaseCommand):
         Card.objects.all().delete()
 
     def _populate_users_and_cards(self, amount=1):
-        customer_id = '55555552'
+        customer_id = str(random.randint(10000000, 99999999))
         parent = ParentUserFactory.build(customer_id=customer_id)
         parent.set_password(DEFAULT_PASSWORD)
         parent.save()
@@ -41,10 +42,10 @@ class Command(BaseCommand):
         child.set_password(DEFAULT_PASSWORD)
         child.save()
 
-        card = CardFactory(child=child, parent=parent, balance=decimal.Decimal(200))
-        deposit_funds(card.id, amount=decimal.Decimal(500))
+        card = CardFactory(child=child, parent=parent, balance=decimal.Decimal(70))
+        deposit_funds(card.id, amount=decimal.Decimal(100))
 
         TransactionFactory(card=card, user=child,
-                           type=constants.TYPE_EXPENSE, amount=decimal.Decimal(-100))
+                           type=constants.TYPE_EXPENSE, amount=decimal.Decimal(-10))
         TransactionFactory(card=card, user=child,
-                           type=constants.TYPE_EXPENSE, amount=decimal.Decimal(-200))
+                           type=constants.TYPE_EXPENSE, amount=decimal.Decimal(-20))

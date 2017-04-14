@@ -40,10 +40,10 @@ class CardDepositLimitCalculator(object):
         return sum([
             t['amount']
             for t in self.transactions
-            if self._date_within_days(t['date'], days)
+            if self._date_within_days(t['time'], days)
             and t['amount'] > 0
         ])
 
     @staticmethod
     def _date_within_days(date, days):
-        return (datetime.datetime.now() - date).days < days
+        return (datetime.datetime.now() - date.replace(tzinfo=None)).days < days
