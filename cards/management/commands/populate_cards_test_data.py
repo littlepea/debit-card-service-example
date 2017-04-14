@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self._reset_db()
-        self._populate_users_and_cards(3)
+        self._populate_users_and_cards()
         pass
 
     @staticmethod
@@ -42,7 +42,7 @@ class Command(BaseCommand):
         child.set_password(DEFAULT_PASSWORD)
         child.save()
 
-        card = CardFactory(child=child, parent=parent, balance=decimal.Decimal(70))
+        card = CardFactory(child=child, parent=parent, balance=decimal.Decimal(0))
         deposit_funds(card.id, amount=decimal.Decimal(100))
 
         TransactionFactory(card=card, user=child,

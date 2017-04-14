@@ -75,3 +75,14 @@ def deposit_funds(card_id, amount):
     deposit = create_deposit_transaction(transaction_id, card, amount)
     deposit.save()
     return deposit
+
+
+def update_card_balance(transaction):
+    """
+    Applies a transaction to reflect of card balance
+
+    :param transaction: Transaction instance
+    """
+    card = get_card_by_id(transaction.card_id)
+    card.balance += transaction.amount
+    card.save()

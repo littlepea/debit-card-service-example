@@ -33,7 +33,6 @@ class Transaction(models.Model):
     """
     Card transaction
     """
-    # TODO: Update card balance when transaction is created (signals)
     # TODO: Remove FKs to User model
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='card_transactions',
