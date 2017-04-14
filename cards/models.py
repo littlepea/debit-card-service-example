@@ -15,6 +15,7 @@ class Card(models.Model):
     Debit card
     """
     # TODO: Allow more than one parent to access a card
+    # TODO: Remove FKs to User model
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     child = models.ForeignKey(User, on_delete=models.CASCADE, related_name='child_cards',
                               verbose_name=_('Child'), help_text=_('Child user of this card'))
@@ -33,6 +34,7 @@ class Transaction(models.Model):
     Card transaction
     """
     # TODO: Update card balance when transaction is created (signals)
+    # TODO: Remove FKs to User model
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name='card_transactions',
                              verbose_name=_('Card'), help_text=_('Card used in this transaction'))

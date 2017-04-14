@@ -19,9 +19,11 @@ class DepositSerializer(serializers.Serializer):
                                       help_text='Amount of funds to deposit to the child\'s card')
 
     def validate_amount(self, value):
+        """
+        Checks that amount doesn't exceed the max deposit limit
+        """
         limit = self.initial_data['max_deposit']
         if value > limit:
             raise serializers.ValidationError('Deposit amount exceeds the current limit: {:.2f} GBP'.format(limit))
 
         return value
-

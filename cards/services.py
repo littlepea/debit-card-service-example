@@ -40,6 +40,7 @@ def get_max_deposit_limit(card):
     if not isinstance(card, Card):
         card = get_card_by_id(card)
 
+    # TODO: extract transactions querying into a separate service method
     date_from = datetime.today() - timedelta(days=365)
     transactions = list(card.card_transactions.filter(time__gte=date_from).values('time', 'amount'))
     calc = CardDepositLimitCalculator(card.balance, transactions)

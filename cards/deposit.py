@@ -6,6 +6,8 @@ from cards import constants
 class CardDepositLimitCalculator(object):
     """
     Helps calculate the max deposit limit
+
+    All the compliance logic is here
     """
     def __init__(self, balance, transactions=None):
         self.balance = balance

@@ -2,6 +2,9 @@ import braintree
 from django.conf import settings
 
 
+# TODO: `backends` should be a package with a separate module for each backend
+
+
 class CustomerCreationError(Exception):
     pass
 
@@ -12,7 +15,6 @@ class CreditCardError(Exception):
 
 class PaymentError(Exception):
     pass
-
 
 
 class BraintreeBackend(object):

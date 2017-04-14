@@ -30,7 +30,7 @@ class Command(BaseCommand):
         Transaction.objects.all().delete()
         Card.objects.all().delete()
 
-    def _populate_users_and_cards(self, amount=1):
+    def _populate_users_and_cards(self):
         customer_id = str(random.randint(10000000, 99999999))
         parent = ParentUserFactory.build(customer_id=customer_id)
         parent.set_password(DEFAULT_PASSWORD)

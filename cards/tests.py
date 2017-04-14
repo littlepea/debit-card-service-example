@@ -4,7 +4,6 @@ import datetime
 import mock
 from freezegun import freeze_time
 from django.test import SimpleTestCase
-from rest_framework import serializers
 
 from authentication.factories import ParentUserFactory, ChildUserFactory
 from cards.models import Transaction
@@ -13,6 +12,9 @@ from cards.deposit import CardDepositLimitCalculator
 from cards.factories import CardFactory
 from cards import constants
 from cards.serializers import DepositSerializer
+
+
+# TODO: separate tests into different files in `tests` package (tests/test_*.py)
 
 
 class GetUserCardsTestCase(SimpleTestCase):
