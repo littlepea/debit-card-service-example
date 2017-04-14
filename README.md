@@ -1,5 +1,10 @@
 # Debit Card Service
 
+This codebase is just an example of a Django + DRF service implementation 
+for children's debit cards managed by their parents.
+
+This is not a real project, just a code demo.
+
 ## Background
 
 It's an API for managing children debit cared by parents based on compliance limits.
@@ -38,7 +43,24 @@ $ python manage.py populate_cards_test_data
 $ python manage.py runserver
 ```
 
-## Features
+## Architecture notes
+
+* In a micro-service reality `authentication`, `cards` and `payments` applications would be physically separated:
+  * Different repositories
+  * Independent schemas (no cross-service FK relations)
+  * Independent Django projects
+  * Communication over network and service discovery (something like Crossbar.io, Consul, K8s or SmartStack)
+  * Here they are combined in order to speed-up prototyping and no need for setting up Docker Compose
+* Only "happy path" has been considered here, no edge cases or error handling whatsoever
+  * But in a real-world application it should be much more sophisticated
+
+## TODO
+
+![](https://www.evernote.com/l/AHQ4Yi2IdVpJvpzcWbq6jkJWmEBnhAfjNTwB/image.png)
+
+## Scenarios
+
+The below scenarios are still to be automated using BDD (pytest-bdd or django-behave).
 
 ### Scenario 1: Parent loads a compliant amount to child's card
 
