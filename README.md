@@ -45,7 +45,7 @@ $ python manage.py runserver
   - with nothing loaded in the past month
   - and only £1000 loaded in the past year
 * When parent loads £300
-* Then Osper receives  £300 through Braintree
+* Then our service receives £300 through Braintree
   - and child's balance becomes £800
 
 ### Scenario 2: Parent loads too much money to child's card for a day
