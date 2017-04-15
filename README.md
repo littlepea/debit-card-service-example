@@ -166,7 +166,7 @@ in your Braitree sandbox.
 
 ## Scenarios
 
-The below scenarios are still to be automated using BDD (pytest-bdd or django-behave).
+The below Acceptance Tests are still to be automated using BDD (pytest-bdd or django-behave).
 
 ### Scenario 1: Parent loads a compliant amount to child's card
 
