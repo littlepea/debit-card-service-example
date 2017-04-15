@@ -26,7 +26,6 @@ class BraintreeBackend(object):
                                           merchant_id=settings.BRAINTREE_MERCHANT_ID,
                                           public_key=settings.BRAINTREE_PUBLIC_KEY,
                                           private_key=settings.BRAINTREE_PRIVATE_KEY)
-        self.client_token = braintree.ClientToken.generate()
 
     def create_customer(self, email, customer_id=None, first_name=None, last_name=None, **kwargs):
         """

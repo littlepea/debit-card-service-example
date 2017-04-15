@@ -12,9 +12,6 @@ class BraintreeBackendTestCase(SimpleTestCase):
     def setUp(self):
         self.backend = backend_factory()
 
-    def test_client_token(self):
-        self.assertIsNotNone(self.backend.client_token)
-
     def test_get_sale_options(self):
         amount = decimal.Decimal(10)
         customer_id = TEST_CUSTOMER_ID
