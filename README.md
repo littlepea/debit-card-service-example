@@ -35,14 +35,14 @@ we just use GBP.
 
 ### Clone the repository
 
-```console
+```commandline
 git clone https://github.com/littlepea/debit-card-service-example.git
 cd debit-card-service-example
 ```
 
 ### Startup
 
-```console
+```commandline
 virtualenv venv
 . venv/bin/activate
 pip install -r requirements.txt
@@ -100,7 +100,7 @@ you'll receive a validation error response with 400 status:
 
 ## Running tests
 
-```console
+```commandline
 python manage.py test
 Creating test database for alias 'default'...
 ......................
@@ -115,13 +115,13 @@ Destroying test database for alias 'default'...
 
 The easiest way id to create `local_setting.py` from example:
 
-```console
+```commandline
 cp card_service/local_settings_example.py card_service/local_settings.py
 ```
 
 Then add your own credentials there:
 
-```console
+```python
 BRAINTREE_MERCHANT_ID = '<your_merchant_id>'
 BRAINTREE_PUBLIC_KEY = '<your_public_key>'
 BRAINTREE_PRIVATE_KEY = '<your_private_key>'
@@ -135,6 +135,12 @@ Another way is to use ENV variables:
 export BRAINTREE_MERCHANT_ID="<your_merchant_id>"
 export BRAINTREE_PUBLIC_KEY="<your_public_key>"
 export BRAINTREE_PRIVATE_KEY"<your_private_key>"
+```
+
+After switching to Braintree sandbox at least re-run `populate_cards_test_data` command 
+or better yet fully reset the DB:
+
+```commandline
 rm db.sqlite3
 python manage.py migrate
 python manage.py populate_cards_test_data 
