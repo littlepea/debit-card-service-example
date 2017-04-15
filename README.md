@@ -81,6 +81,23 @@ Click `Authorize` and paste the copied token into the `value` field with `JWT ` 
 JWT <your_token_here>
 ```
 
+Now you have access to the `/api/cards/` as a parent:
+ 
+ ![](https://media.giphy.com/media/xUPGcAtsXWZqruzf1u/giphy.gif)
+ 
+### Copy a card ID
+
+![](https://media.giphy.com/media/l4FGsBgcBO2RvBQDm/giphy.gif)
+
+### Try to deposit some funds
+
+![](https://media.giphy.com/media/3o7bueMGWYurkX60lG/giphy.gif)
+
+If you deposit too much (ex: 400 GBP) 
+you'll receive a validation error response with 400 status:
+
+![](https://media.giphy.com/media/3oKIPsfxvRFdLmQlRS/giphy.gif)
+
 ## Architecture notes
 
 * In a micro-service reality `authentication`, `cards` and `payments` applications would be physically separated:
