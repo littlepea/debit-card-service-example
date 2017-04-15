@@ -98,6 +98,51 @@ you'll receive a validation error response with 400 status:
 
 ![](https://media.giphy.com/media/3oKIPsfxvRFdLmQlRS/giphy.gif)
 
+## Running tests
+
+```console
+python manage.py test
+Creating test database for alias 'default'...
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 0.101s
+
+OK
+Destroying test database for alias 'default'...
+```
+
+## Using the real Braintree sandbox environment
+
+The easiest way id to create `local_setting.py` from example:
+
+```console
+cp card_service/local_settings_example.py card_service/local_settings.py
+```
+
+Then add your own credentials there:
+
+```console
+BRAINTREE_MERCHANT_ID = '<your_merchant_id>'
+BRAINTREE_PUBLIC_KEY = '<your_public_key>'
+BRAINTREE_PRIVATE_KEY = '<your_private_key>'
+
+PAYMENT_BACKEND = 'payments.backends.BraintreeBackend'
+```
+
+Another way is to use ENV variables:
+
+```commandline
+export BRAINTREE_MERCHANT_ID="<your_merchant_id>"
+export BRAINTREE_PUBLIC_KEY="<your_public_key>"
+export BRAINTREE_PRIVATE_KEY"<your_private_key>"
+rm db.sqlite3
+python manage.py migrate
+python manage.py populate_cards_test_data 
+```
+
+Note that this will actually create a test customer with a payment method and a test deposit transaction 
+in your Braitree sandbox. 
+
 ## Architecture notes
 
 * In a micro-service reality `authentication`, `cards` and `payments` applications would be physically separated:
