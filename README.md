@@ -31,16 +31,54 @@ Braintree supplies a [sandbox environment](https://articles.braintreepayments.co
 For this example we'll use UK as the location and do not need to worry about multiple currencies for now, 
 we just use GBP.
 
-## Startup
+## Usage
+
+### Clone the repository
 
 ```console
-$ virtualenv venv
-$ . venv/bin/activate
-$ pip install -r requirements.txt
-$ python manage.py migrate
-$ python manage.py createsuperuser
-$ python manage.py populate_cards_test_data
-$ python manage.py runserver
+git clone https://github.com/littlepea/debit-card-service-example.git
+cd debit-card-service-example
+```
+
+### Startup
+
+```console
+virtualenv venv
+. venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py populate_cards_test_data
+python manage.py runserver
+```
+
+### Open API docs in your browser
+
+* [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+
+![](https://www.evernote.com/l/AHR4FBy9FhdFAIRZE2lM5kxpZg2EW_gcqckB/image.png)
+
+### Acquire an access token (JWT)
+
+`POST` the following data to `/auth/token-auth/` endpoint in order to login as one of the parents:
+
+```json
+{
+  "username": "parent0",
+  "password": "i_am_not_safe_to_use"
+}
+```
+
+Then copy the token:
+
+![](https://media.giphy.com/media/3og0IMUSbN32pj39N6/giphy.gif)
+
+### Authorize with JWT
+
+Click `Authorize` and paste the copied token into the `value` field with `JWT ` prefix:
+
+```
+JWT <your_token_here>
 ```
 
 ## Architecture notes
