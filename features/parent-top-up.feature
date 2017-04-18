@@ -36,3 +36,30 @@ Feature: Debit Card deposit by parent
         When parent deposits £500
         Then the deposit will fail
             And child's balance will be £500
+
+    Scenario: Parent loads too much money to child's card for a year
+        Given a child's card with a balance of £500
+            And a following set of transactions
+                | date          | amount    |
+                | 2016-04-01    | 500       |
+                | 2016-05-01    | 500       |
+                | 2016-05-15    | -300      |
+                | 2016-06-01    | 500       |
+                | 2016-06-15    | -500      |
+                | 2016-07-01    | 300       |
+                | 2016-07-15    | -500      |
+            And today is 2017-03-01
+        When parent deposits £300
+        Then the deposit will fail
+            And child's balance will be £500
+
+    Scenario: Parent loads too much money to child's card which exceeds the maximum balance
+        Given a child's card with a balance of £800
+            And a following set of transactions
+                | date          | amount    |
+                | 2016-06-01    | 400       |
+                | 2016-07-01    | 400       |
+            And today is 2017-03-01
+        When parent deposits £300
+        Then the deposit will fail
+            And child's balance will be £800

@@ -98,7 +98,7 @@ you'll receive a validation error response with 400 status:
 
 ![](https://media.giphy.com/media/3oKIPsfxvRFdLmQlRS/giphy.gif)
 
-## Running tests
+## Running Unit Tests tests
 
 ```commandline
 python manage.py test
@@ -109,6 +109,16 @@ Ran 22 tests in 0.101s
 
 OK
 Destroying test database for alias 'default'...
+```
+
+## Running Acceptance Tests (BDD)
+
+```commandline
+manage.py behave --simple
+
+1 feature passed, 0 failed, 0 skipped
+5 scenarios passed, 0 failed, 0 skipped
+30 steps passed, 0 failed, 0 skipped, 0 undefined
 ```
 
 ## Using the real Braintree sandbox environment
@@ -166,44 +176,10 @@ in your Braitree sandbox.
 
 ## Scenarios
 
-The below Acceptance Tests are still to be automated using BDD (pytest-bdd or django-behave).
+The below [Acceptance Tests are automated using BDD](features) (behave-django).
 
-### Scenario 1: Parent loads a compliant amount to child's card
-
-* Given child's card has a balance of £500
-  - with nothing loaded in the past month
-  - and only £1000 loaded in the past year
-* When parent loads £300
-* Then our service receives £300 through Braintree
-  - and child's balance becomes £800
-
-### Scenario 2: Parent loads too much money to child's card for a day
-
-* Given child's card has a balance of £500
-  - with £400 already loaded earlier today
-* When parent loads £300
-* Then the transaction will be declined
-  - and child's balance stays £500
-  
-### Scenario 3: Parent loads too much money to child's card for a month
-
-* Given child's card has a balance of £500
-  - with £400 already loaded in the past month
-* When parent loads £500
-* Then the transaction will be declined
-  - and child's balance stays £500
-  
-### Scenario 4: Parent loads too much money to child's card for a year
-
-* Given child's card has a balance of £500
-  - with £1800 already loaded in the past 365 days
-* When parent loads £300
-* Then the transaction will be declined
-  - and child's balance stays £500
-  
-### Scenario 5: Parent loads too much money to child's card which exceeds the maximum balance
-
-* Given child's card has a balance of £800
-* When parent loads £300
-* Then the transaction will be declined
-  - and child's balance stays £800
+1. Parent loads a compliant amount to child's card
+1. Parent loads too much money to child's card for a day
+1. Parent loads too much money to child's card for a month
+1. Parent loads too much money to child's card for a year
+1. Parent loads too much money to child's card which exceeds the maximum balance
