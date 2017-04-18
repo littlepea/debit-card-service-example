@@ -111,7 +111,7 @@ OK
 Destroying test database for alias 'default'...
 ```
 
-## Running Acceptance Tests (BDD)
+## Running [Acceptance Tests](features) (BDD)
 
 ```commandline
 manage.py behave --simple
@@ -120,6 +120,8 @@ manage.py behave --simple
 5 scenarios passed, 0 failed, 0 skipped
 30 steps passed, 0 failed, 0 skipped, 0 undefined
 ```
+
+Acceptance tests work with both the `DummyBackend` and the real `BraintreeBackend` in a sandbox environment.
 
 ## Using the real Braintree sandbox environment
 
