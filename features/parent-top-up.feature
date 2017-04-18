@@ -10,5 +10,26 @@ Feature: Debit Card deposit by parent
                 | 2016-04-01    | 500       |
                 | 2016-06-01    | 500       |
                 | 2016-08-01    | -500      |
+            And today is 2017-03-01
         When parent deposits £300
-        Then child's balance becomes £800
+        Then child's balance will be £800
+
+    Scenario: Parent loads too much money to child's card for a day
+        Given a child's card with a balance of £500
+            And a following set of transactions
+                | date          | amount    |
+                | 2016-06-01    | 100       |
+                | 2017-03-01    | 400       |
+            And today is 2017-03-01
+        When parent deposits £300
+        Then child's balance will be £500
+
+    Scenario: Parent loads too much money to child's card for a month
+        Given a child's card with a balance of £500
+            And a following set of transactions
+                | date          | amount    |
+                | 2016-06-01    | 100       |
+                | 2017-02-15    | 400       |
+            And today is 2017-03-01
+        When parent deposits £500
+        Then child's balance will be £500
