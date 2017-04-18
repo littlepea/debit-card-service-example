@@ -1,7 +1,6 @@
 import decimal
 
 from behave import when, then
-from rest_framework.test import APIClient
 
 from cards.models import Card
 from features.steps import utils
@@ -10,9 +9,7 @@ from features.steps import utils
 @when(u'parent deposits {amount}')
 def parent_deposit(context, amount):
     amount = utils.parse_money_string(amount)
-    client = APIClient()
-    client.force_authenticate(context.parent)
-    response = client.post('/api/cards/{}/top-up/'.format(context.card.id), {'amount': amount}, format='json')
+    response = utils.api_post('card-top-up', pk=context.card.id, user=context.parent, amount=amount)
     context.test.assertEquals(amount, decimal.Decimal(response.data['amount']))
 
 
