@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     # Utils
     'django_extensions',
+    'behave_django',
 
     # Custom
     'authentication',
