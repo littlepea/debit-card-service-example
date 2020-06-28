@@ -39,12 +39,9 @@ class CardDepositLimitCalculator(object):
         return constants.DEPOSIT_BALANCE_LIMIT - self.balance
 
     def _deposited_in_the_past_days(self, days=1):
-        return sum([
-            t['amount']
-            for t in self.transactions
-            if self._date_within_days(t['time'], days)
-            and t['amount'] > 0
-        ])
+        return sum(t['amount'] for t in self.transactions
+                if self._date_within_days(t['time'], days)
+                and t['amount'] > 0)
 
     @staticmethod
     def _date_within_days(date, days):

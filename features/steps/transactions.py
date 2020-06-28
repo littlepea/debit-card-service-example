@@ -33,7 +33,6 @@ def set_of_transactions(context):
 
         with freeze_time(time):
             transaction = TransactionFactory(card=context.card, user=user, type=transaction_type, amount=amount)
-        pass
 
 
 @given(u'today is {date}')
