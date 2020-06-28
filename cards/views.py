@@ -33,8 +33,7 @@ class CardViewSet(NestedViewSetMixin,
         return services.get_user_cards(self.request.user)
 
     def get_object(self):
-        obj = super(CardViewSet, self).get_object()
-        return obj
+        return super(CardViewSet, self).get_object()
 
     @detail_route(methods=['post'], permission_classes=[IsParentCardOwner, IsAuthenticated], url_path='top-up')
     def top_up(self, request, pk=None):

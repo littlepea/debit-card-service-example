@@ -22,7 +22,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self._reset_db()
         self._populate_users_and_cards()
-        pass
 
     @staticmethod
     def _reset_db():

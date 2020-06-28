@@ -26,8 +26,7 @@ def get_card_by_id(card_id):
     :param card_id: Card ID
     :return: Card instance
     """
-    card = Card.objects.get(pk=card_id)
-    return card
+    return Card.objects.get(pk=card_id)
 
 
 def get_max_deposit_limit(card):
