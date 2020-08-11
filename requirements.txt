@@ -1,7 +1,7 @@
 Django==1.11.29
 django-cors-headers==2.0.2
 django-filter==1.0.2
-djangorestframework==3.6.2
+djangorestframework==3.9.1
 djangorestframework-jwt==1.10.0
 django-rest-swagger==2.1.2
 braintree==3.35.0
